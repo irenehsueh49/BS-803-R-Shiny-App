@@ -56,7 +56,7 @@ server <- function(input, output, session) {
   output$data_table <- DT::renderDataTable({
     if (is.null(tableData()))
       return(NULL)
-    subset_data(), 100
+    subset_data()
   })
   
   observeEvent(input$reset, {
