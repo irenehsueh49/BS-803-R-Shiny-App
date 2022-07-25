@@ -1,7 +1,7 @@
-library(shinythemes)
-library(DT)
 library(shiny)
 library(shinyjs)
+library(shinythemes)
+library(DT)
 
 ui <- fluidPage(
   theme = shinythemes::shinytheme("cerulean"),
@@ -18,18 +18,18 @@ ui <- fluidPage(
                 ),
       sliderInput(inputId = "slider",
                   label = "Choose how many diamonds to subset:",
-                  min=1, max=53940, value = 53940, ticks = FALSE
+                  min=0, max=53940, value=53940, step=25, ticks=FALSE
                   ),
       actionButton(inputId = "reset", label = "Reset")
-    ),
+      ),
     
     #Main Panel - Outputs
     mainPanel(
       plotOutput(outputId = "histogram"),
       DT::dataTableOutput(outputId = "data_table")
+      )
     )
   )
-)
 
 server <- function(input, output, session) {
   tableData <- reactive({
@@ -45,7 +45,7 @@ server <- function(input, output, session) {
   subset_data <- reactive({
     tableData()[1:input$slider,]
   })
-
+  
   output$histogram <- renderPlot({
     if (is.null(tableData()))
       return(NULL)
@@ -61,9 +61,8 @@ server <- function(input, output, session) {
   
   observeEvent(input$reset, {
     shinyjs::reset("slider")
-    updateSliderInput(session, "slider", value = 53940)
+    updateSliderInput(session, "slider", value=53940)
   })
 }
 
 shinyApp(ui = ui, server = server)
-
