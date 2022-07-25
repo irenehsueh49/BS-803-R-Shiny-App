@@ -13,7 +13,7 @@ ui <- fluidPage(
     #Sidebar Panel - Inputs
     sidebarPanel(
       fileInput(inputId = "file", 
-                label = "Upoad diamonds.txt data here", 
+                label = "Upload diamonds.txt data here", 
                 accept = c(".tsv")
                 ),
       sliderInput(inputId = "slider",
@@ -34,12 +34,12 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   tableData <- reactive({
     uploaded_data <- input$file
-    
+
     if (is.null(uploaded_data))
       return(NULL)
     
-    indata <- read.table(uploaded_data$datapath, sep = "\t", header=TRUE)
-    indata
+    data_table <- read.table(uploaded_data$datapath, sep = "\t", header=TRUE)
+    data_table
   })
   
   subset_data <- reactive({
@@ -50,7 +50,10 @@ server <- function(input, output, session) {
     if (is.null(tableData()))
       return(NULL)
     x = subset_data()$carat
-    hist(x, col = "hotpink", border = "black", main = "Histogram of Diamond Carat")
+    hist(x, 
+         col="hotpink", 
+         border="black", 
+         main="Histogram of Diamond Carat")
   })
   
   output$data_table <- DT::renderDataTable({
