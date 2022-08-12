@@ -39,7 +39,7 @@ server <- function(input, output, session) {
       return(NULL)
     
     data_table <- read.table(uploaded_data$datapath, sep = "\t", header=TRUE)
-    data_table
+    return(data_table)
   })
   
   subset_data <- reactive({
