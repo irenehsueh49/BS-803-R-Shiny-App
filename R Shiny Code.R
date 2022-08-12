@@ -15,26 +15,26 @@ ui <- fluidPage(
       fileInput(inputId = "file", 
                 label = "Upload diamonds.txt data here", 
                 accept = c(".tsv")
-                ),
+      ),
       sliderInput(inputId = "slider",
                   label = "Choose how many diamonds to subset:",
                   min=0, max=53940, value=53940, step=25, ticks=FALSE
-                  ),
-      actionButton(inputId = "reset", label = "Reset")
       ),
+      actionButton(inputId = "reset", label = "Reset")
+    ),
     
     #Main Panel - Outputs
     mainPanel(
       plotOutput(outputId = "histogram"),
       DT::dataTableOutput(outputId = "data_table")
-      )
     )
   )
+)
 
 server <- function(input, output, session) {
   tableData <- reactive({
     uploaded_data <- input$file
-
+    
     if (is.null(uploaded_data))
       return(NULL)
     
@@ -50,16 +50,16 @@ server <- function(input, output, session) {
     if (is.null(tableData()))
       return(NULL)
     x = subset_data()$carat
-    hist(x, 
-         col="hotpink", 
-         border="black", 
-         main="Histogram of Diamond Carat")
+    return(hist(x, 
+                col="hotpink", 
+                border="black", 
+                main="Histogram of Diamond Carat"))
   })
   
   output$data_table <- DT::renderDataTable({
     if (is.null(tableData()))
       return(NULL)
-    subset_data()
+    return(subset_data())
   })
   
   observeEvent(input$reset, {
